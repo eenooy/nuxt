@@ -1,3 +1,5 @@
-<template>
-  <NuxtLink href="/soyoon">soyoon page go!!!</NuxtLink>
-</template>
+<template>???</template>
+
+<script setup>
+console.log("22");
+</script>
