@@ -1,5 +1,6 @@
 <template>???</template>
 
 <script setup>
-console.log("22");
+import VueCookies from "vue-cookies";
+// console.log("뭐가뜸?", VueCookies.get("TT"));
 </script>
