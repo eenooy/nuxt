@@ -1,3 +1,3 @@
-<template>홈</template>
+<template>숍</template>
 
 <script setup lang="ts"></script>
