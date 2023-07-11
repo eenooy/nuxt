@@ -11,9 +11,10 @@ export default defineNuxtConfig({
             meta: [{ name: "format-detection", content: "telephone=no" }],
         },
     },
-
     css: ["@/assets/scss/common.scss"],
-
+    imports: {
+        dirs: ["types"],
+    },
     vite: {
         css: {
             preprocessorOptions: {

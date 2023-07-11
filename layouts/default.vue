@@ -5,9 +5,8 @@
                 <NuxtLink class="link" :to="links[i]">{{ menu }}</NuxtLink>
             </div>
         </nav>
-        <div class="page">
-            <slot />
-        </div>
+
+        <slot />
     </div>
 </template>
 
