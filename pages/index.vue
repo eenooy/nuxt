@@ -1,26 +1,30 @@
 <template>
     <div class="page homePage">
         <div class="sliderBox">
-            <button class="arrowButton" @click="showImage--">
+            <button class="arrowButton" @click="prevMove">
                 <span class="text">&lt;</span>
             </button>
 
             <div class="slider">
-                <div class="wrap">
-                    <div v-for="(item, i) in swiper" class="item" :class="{ '--showing': showImage === i + 1 }" :key="i">
-                        <img class="img" :src="item" alt="" />
-                    </div>
-
-                    <div class="itemBackground"></div>
-                </div>
+                <ul class="wrap">
+                    <li class="item">
+                        <img class="img" :src="swiper[prevIdx]" alt="" />
+                    </li>
+                    <li class="item">
+                        <img class="img" :src="swiper[currentIdx]" alt="" />
+                    </li>
+                    <li class="item">
+                        <img class="img" :src="swiper[nextIdx]" alt="" />
+                    </li>
+                </ul>
             </div>
 
-            <button class="arrowButton" @click="showImage++">
+            <button class="arrowButton" @click="nextMove">
                 <span class="text">&gt;</span>
             </button>
         </div>
         <div class="pagination">
-            <button v-for="(item, i) in swiper" class="item" :class="{ '--active': showImage === i + 1 }" key="i" @click="showImage = i + 1"></button>
+            <button v-for="(item, i) in swiper" class="item" :class="{ '--active': currentIdx === i }" key="i" @click="currentIdx = i"></button>
         </div>
     </div>
 </template>
@@ -35,18 +39,46 @@ import img6 from "@/assets/image/img6.png";
 import img7 from "@/assets/image/img7.png";
 
 const swiper = [img1, img2, img3, img4, img5, img6, img7];
-const showImage = ref<number>(1);
+const prevIdx = ref<number>(6);
+const currentIdx = ref<number>(0);
+const nextIdx = ref<number>(1);
 
-watch(
-    () => showImage.value,
-    (newData) => {
-        if (7 < newData) {
-            showImage.value = newData - 7;
-        } else if (newData < 1) {
-            showImage.value = newData + 7;
+const swiperLength = swiper.length;
+
+function nextMove() {
+    if (0 <= currentIdx.value && currentIdx.value % 2 === 0) {
+        if (currentIdx.value < swiperLength) {
+            if (0 < currentIdx.value) {
+                if (currentIdx.value === swiperLength - 1) {
+                    currentIdx.value = 0;
+                    prevIdx.value = 6;
+                    nextIdx.value = 1;
+                } else {
+                    currentIdx.value += 1;
+                }
+            } else {
+                currentIdx.value += 1;
+            }
         }
+    } else {
+        currentIdx.value += 1;
+        prevIdx.value = currentIdx.value - 1;
+        nextIdx.value += currentIdx.value + 1;
     }
-);
+}
+
+function prevMove() {
+    if (currentIdx.value >= 0) {
+        if (currentIdx.value > 0) {
+            currentIdx.value -= 1;
+        } else {
+            currentIdx.value = swiperLength - 1;
+        }
+
+        prevIdx.value = currentIdx.value - 1;
+        nextIdx.value = (currentIdx.value + 1) % swiperLength;
+    }
+}
 </script>
 
 <style scoped lang="scss">
@@ -97,30 +129,19 @@ watch(
 
         .wrap {
             display: flex;
-            width: 5600px;
-            height: 600px;
-        }
-        .item {
             position: absolute;
+            left: -800px;
+            width: 2400px;
+            height: 600px;
+            transition: 0.5s;
+        }
 
+        .item {
             .img {
                 display: block;
                 width: 800px;
                 height: 600px;
             }
-
-            &.--showing {
-                z-index: 1;
-                animation: fadeIn 0.5s linear;
-            }
-        }
-
-        .itemBackground {
-            position: absolute;
-            width: 800px;
-            height: 600px;
-            background-color: black;
-            z-index: 0;
         }
     }
 }
@@ -147,15 +168,6 @@ watch(
         &.--active {
             background-color: var(--brown-a200);
         }
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
     }
 }
 </style>
