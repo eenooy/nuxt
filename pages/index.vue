@@ -7,14 +7,8 @@
 
             <div class="slider">
                 <ul class="wrap">
-                    <li class="item">
-                        <img class="img" :src="swiper[prevIdx]" alt="" />
-                    </li>
-                    <li class="item">
-                        <img class="img" :src="swiper[currentIdx]" alt="" />
-                    </li>
-                    <li class="item">
-                        <img class="img" :src="swiper[nextIdx]" alt="" />
+                    <li v-for="(item, i) in swiper" class="item" :class="{ '--active': currentIdx === i, '--prev': currentIdx === i + 1, '--next': currentIdx === i - 1 }" :key="i">
+                        <img class="img" :src="item" alt="" />
                     </li>
                 </ul>
             </div>
@@ -39,45 +33,17 @@ import img6 from "@/assets/image/img6.png";
 import img7 from "@/assets/image/img7.png";
 
 const swiper = [img1, img2, img3, img4, img5, img6, img7];
-const prevIdx = ref<number>(6);
-const currentIdx = ref<number>(0);
-const nextIdx = ref<number>(1);
 
-const swiperLength = swiper.length;
+const currentIdx = ref<number>(0);
 
 function nextMove() {
-    if (0 <= currentIdx.value && currentIdx.value % 2 === 0) {
-        if (currentIdx.value < swiperLength) {
-            if (0 < currentIdx.value) {
-                if (currentIdx.value === swiperLength - 1) {
-                    currentIdx.value = 0;
-                    prevIdx.value = 6;
-                    nextIdx.value = 1;
-                } else {
-                    currentIdx.value += 1;
-                }
-            } else {
-                currentIdx.value += 1;
-            }
-        }
-    } else {
-        currentIdx.value += 1;
-        prevIdx.value = currentIdx.value - 1;
-        nextIdx.value += currentIdx.value + 1;
-    }
+    const totalImages = swiper.length;
+    currentIdx.value = (currentIdx.value + 1) % totalImages;
 }
 
 function prevMove() {
-    if (currentIdx.value >= 0) {
-        if (currentIdx.value > 0) {
-            currentIdx.value -= 1;
-        } else {
-            currentIdx.value = swiperLength - 1;
-        }
-
-        prevIdx.value = currentIdx.value - 1;
-        nextIdx.value = (currentIdx.value + 1) % swiperLength;
-    }
+    const totalImages = swiper.length;
+    currentIdx.value = (currentIdx.value - 1 + totalImages) % totalImages;
 }
 </script>
 
@@ -128,17 +94,31 @@ function prevMove() {
         overflow: hidden;
 
         .wrap {
-            display: flex;
             position: absolute;
-            left: -800px;
-            width: 2400px;
+            display: flex;
+            width: 5600px;
             height: 600px;
-            transition: 0.5s;
         }
 
         .item {
+            transition: left 0.5s;
+
+            &.--prev {
+                position: absolute;
+                left: -800px;
+            }
+
+            &.--active {
+                position: absolute;
+                left: 0;
+            }
+
+            &.--next {
+                position: absolute;
+                left: 800px;
+            }
+
             .img {
-                display: block;
                 width: 800px;
                 height: 600px;
             }
