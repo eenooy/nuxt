@@ -7,10 +7,11 @@
 
             <div class="slider">
                 <ul class="wrap">
-                    <li v-for="(item, i) in swiper" class="item" :class="{ '--active': currentIdx === i, '--prev': currentIdx === i + 1, '--next': currentIdx === i - 1 }" :key="i">
+                    <li v-for="(item, i) in swiper" class="item" :class="setClass(i)" :key="i">
                         <img class="img" :src="item" alt="" />
                     </li>
                 </ul>
+                <div class="background"></div>
             </div>
 
             <button class="arrowButton" @click="nextMove">
@@ -33,8 +34,33 @@ import img6 from "@/assets/image/img6.png";
 import img7 from "@/assets/image/img7.png";
 
 const swiper = [img1, img2, img3, img4, img5, img6, img7];
-
 const currentIdx = ref<number>(0);
+
+const setClass = (i: number) => {
+    if (currentIdx.value === i) {
+        return "--active";
+    } else {
+        if (i === currentIdx.value - 1) {
+            return "--prev";
+        }
+
+        if (i === currentIdx.value + 1) {
+            return "--next";
+        }
+
+        if (currentIdx.value === 0) {
+            if (i === -(currentIdx.value - swiper.length + 1)) {
+                return "--prev";
+            }
+        }
+
+        if (currentIdx.value === swiper.length - 1) {
+            if (i === 0) {
+                return "--next";
+            }
+        }
+    }
+};
 
 function nextMove() {
     const totalImages = swiper.length;
@@ -106,22 +132,32 @@ function prevMove() {
             &.--prev {
                 position: absolute;
                 left: -800px;
+                z-index: 1;
             }
 
             &.--active {
                 position: absolute;
                 left: 0;
+                z-index: 1;
             }
 
             &.--next {
                 position: absolute;
                 left: 800px;
+                z-index: 1;
             }
 
             .img {
                 width: 800px;
                 height: 600px;
             }
+        }
+
+        .background {
+            position: absolute;
+            width: 800px;
+            height: 600px;
+            background-color: var(--brown-100);
         }
     }
 }
