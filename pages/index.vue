@@ -127,7 +127,11 @@ function prevMove() {
         }
 
         .item {
+            display: flex;
             transition: left 0.5s;
+            width: 800px;
+            height: 600px;
+            overflow: hidden;
 
             &.--prev {
                 position: absolute;
@@ -150,6 +154,7 @@ function prevMove() {
             .img {
                 width: 800px;
                 height: 600px;
+                object-fit: cover;
             }
         }
 
