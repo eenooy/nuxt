@@ -277,7 +277,7 @@ onMounted(() => {
         bottom: 0;
         min-width: 800px;
         min-height: 10px;
-        background-color: aqua;
+        background-color: rgba(1, 1, 1, 0.3);
 
         .xTargetBar {
             position: absolute;
@@ -285,7 +285,8 @@ onMounted(() => {
             bottom: 0;
             min-width: 15px;
             height: 100%;
-            background-color: brown;
+            background-color: var(--gray-400);
+            border-radius: 6px;
             z-index: 10;
             cursor: pointer;
         }
@@ -297,7 +298,7 @@ onMounted(() => {
         top: 0;
         min-width: 10px;
         min-height: 600px;
-        background-color: aqua;
+        background-color: rgba(1, 1, 1, 0.3);
 
         .yTargetBar {
             position: absolute;
@@ -305,7 +306,8 @@ onMounted(() => {
             top: 0;
             width: 100%;
             min-height: 15px;
-            background-color: brown;
+            background-color: var(--gray-400);
+            border-radius: 6px;
             z-index: 10;
             cursor: pointer;
         }

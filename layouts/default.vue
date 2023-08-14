@@ -9,8 +9,8 @@
 </template>
 
 <script setup lang="ts">
-const menus = ref<string[]>(["SliderEvent", "ScrollEvent", "Date", "Sign-up"]);
-const links = ref<string[]>(["/", "/scroll", "/date", "/sign-up"]);
+const menus = ref<string[]>(["SliderEvent", "ScrollEvent", "Calender", "Sign-up"]);
+const links = ref<string[]>(["/", "/scroll", "/calender", "/sign-up"]);
 </script>
 
 <style scoped lang="scss">
