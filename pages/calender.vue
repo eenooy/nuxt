@@ -29,11 +29,18 @@
                         </div>
 
                         <div class="row --day">
-                            <div class="item" v-for="day in getDaysInMonth()" :key="day">
-                                <button @click="selectDate(currentYear, currentMonth, day)">
-                                    {{ day }}
-                                </button>
-                            </div>
+                            <button class="item" v-for="_lank in startDay"></button>
+
+                            <button
+                                class="item --days"
+                                :class="{ '--red': getDayOfWeek(day) === 0, '--blue': getDayOfWeek(day) === 6 }"
+                                v-for="day in getDaysInMonth()"
+                                :key="day"
+                                @click="selectDate(currentYear, currentMonth, day)"
+                                :data-index="getDayOfWeek(day)"
+                            >
+                                {{ day }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -50,6 +57,8 @@ const currentDate = new Date();
 const currentYear = ref<number>(currentDate.getFullYear());
 const currentMonth = ref<number>(currentDate.getMonth() + 1); // 현재 월로 설정
 
+const startDay = ref<number | null>(null);
+
 const displayYear = computed(() => currentYear.value);
 
 const getMonthName = (month: number) => {
@@ -58,6 +67,7 @@ const getMonthName = (month: number) => {
 };
 
 const getDaysInMonth = () => {
+    startDay.value = null;
     return new Date(currentYear.value, currentMonth.value, 0).getDate();
 };
 
@@ -83,11 +93,30 @@ const selectDate = (year: number, month: number, day: number) => {
     const formattedDate = `${year}-${month}-${day}`;
     selectedDate.value = formattedDate;
     calendarOpen.value = false;
+
+    const dateElement = document.querySelector(`[data-index="${day - 1}"]`);
+    if (dateElement) {
+        dateElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
 };
 
 const getWeekdayNames = () => {
     const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     return weekdayNames;
+};
+
+const getDayOfWeek = (day: number) => {
+    const targetYear = displayYear.value.toString();
+    const targetMonth = currentMonth.value.toString();
+    const targetDay = day.toString().length === 1 ? "0" + day.toString() : day.toString();
+
+    const dayOfWeek = new Date(targetYear + "-" + targetMonth + "-" + targetDay).getDay();
+
+    if (startDay.value === null) {
+        startDay.value = dayOfWeek;
+    }
+
+    return dayOfWeek;
 };
 </script>
 
@@ -106,8 +135,8 @@ const getWeekdayNames = () => {
     }
 
     .button {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         border-radius: 4px;
 
         &:hover {
@@ -138,7 +167,7 @@ const getWeekdayNames = () => {
     .calendar {
         position: absolute;
         left: 50%;
-        top: 100%;
+        top: calc(100% + 10px);
         transform: translateX(-50%);
         width: 480px;
         border-radius: 14px;
@@ -211,6 +240,18 @@ const getWeekdayNames = () => {
                 align-items: center;
                 justify-content: center;
                 height: 60px;
+
+                &.--red {
+                    color: #e91e63;
+                }
+
+                &.--blue {
+                    color: #00b8d4;
+                }
+
+                &.--days:hover {
+                    background-color: var(--brown-100);
+                }
             }
         }
     }
