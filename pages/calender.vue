@@ -30,7 +30,6 @@
 
                         <div class="row --day">
                             <button class="item" v-for="_lank in startDay"></button>
-
                             <button
                                 class="item --days"
                                 :class="{ '--red': getDayOfWeek(day) === 0, '--blue': getDayOfWeek(day) === 6 }"
@@ -67,7 +66,6 @@ const getMonthName = (month: number) => {
 };
 
 const getDaysInMonth = () => {
-    startDay.value = null;
     return new Date(currentYear.value, currentMonth.value, 0).getDate();
 };
 
@@ -93,11 +91,6 @@ const selectDate = (year: number, month: number, day: number) => {
     const formattedDate = `${year}-${month}-${day}`;
     selectedDate.value = formattedDate;
     calendarOpen.value = false;
-
-    const dateElement = document.querySelector(`[data-index="${day - 1}"]`);
-    if (dateElement) {
-        dateElement.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
 };
 
 const getWeekdayNames = () => {
@@ -118,6 +111,13 @@ const getDayOfWeek = (day: number) => {
 
     return dayOfWeek;
 };
+
+watch(
+    () => currentMonth.value,
+    () => {
+        startDay.value = null;
+    }
+);
 </script>
 
 <style scoped lang="scss">
